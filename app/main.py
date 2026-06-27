@@ -19,7 +19,7 @@ def handle_command(cmd):
         case "type":
             arg = cmd[5:]
             match arg:
-                case "echo" | "exit":
+                case "echo" | "exit" | "type":
                     print(f"{arg} is a shell builtin")
                 case _:
                     print(f"{arg}: not found")
