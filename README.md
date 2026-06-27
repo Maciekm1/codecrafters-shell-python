@@ -1,34 +1,110 @@
+# My own Shell program
+
 [![progress-banner](https://backend.codecrafters.io/progress/shell/9dfcf5e0-00ab-4958-b292-7cc85a999694)](https://app.codecrafters.io/users/Maciekm1?r=2qF)
+[![Python](https://img.shields.io/badge/python-3.14-blue?logo=python)](https://www.python.org/downloads/release/python-3140/)
+[![uv](https://img.shields.io/badge/package%20manager-uv-blueviolet?logo=python)](https://docs.astral.sh/uv/)
 
-This is a starting point for Python solutions to the
-["Build Your Own Shell" Challenge](https://app.codecrafters.io/courses/shell/overview).
+My own implementation of a lightweight POSIX-style shell in Python, written to better understand how a shell works under the hood.
 
-In this challenge, you'll build your own POSIX compliant shell that's capable of
-interpreting shell commands, running external programs and builtin commands like
-cd, pwd, echo and more. Along the way, you'll learn about shell command parsing,
-REPLs, builtin commands, and more.
+This project is part of the [CodeCrafters "Build Your Own Shell" challenge](https://app.codecrafters.io/courses/shell/overview), where you incrementally build a shell capable of parsing commands, running external programs, and supporting builtin commands like `cd`, `pwd`, and `echo`.
 
-**Note**: If you're viewing this repo on GitHub, head over to
-[codecrafters.io](https://codecrafters.io) to try the challenge.
+## Features
 
-# Passing the first stage
+- Interactive REPL (Read-Evaluate-Parse Loop) with a `$` prompt
+- Builtin commands: `echo`, `exit`, and `type`
+- External command execution via `PATH` lookup
+- Command-not-found error handling
 
-The entry point for your `shell` implementation is in `app/main.py`. Study and
-uncomment the relevant code, then run the command below to execute the tests on
-our servers:
+## Roadmap
 
-```sh
+This shell is being built stage-by-stage. Upcoming work includes:
+
+- `cd` and `pwd` builtins
+- Standard output and error redirection (`>`, `>>`, `2>`, etc.)
+- Command pipelines (`|`)
+- Quoted arguments and escape sequences
+- Autocompletion and history
+
+## Lessons Learned
+
+- How a REPL reads input, parses commands, and dispatches to builtins vs external programs
+- How shells resolve executables using the `PATH` environment variable
+- The difference between shell builtins and programs found on disk
+
+## Installation
+
+This project uses [uv](https://docs.astral.sh/uv/) as its package manager. Install uv if you don't have it yet:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Maciekm1/codecrafters-shell-python
+cd codecrafters-shell-python
+```
+
+Install dependencies (uv reads `pyproject.toml` and manages the Python version via `.python-version`):
+
+```bash
+uv sync
+```
+
+## Run Locally
+
+Start the shell:
+
+```bash
+./your_program.sh
+```
+
+You should see a `$` prompt. Try a few commands:
+
+```text
+$ echo hello world
+hello world
+$ type echo
+echo is a shell builtin
+$ ls
+<file listing>
+$ exit
+```
+
+The entry point for the shell implementation is `app/main.py`. Locally, `your_program.sh` runs it via `uv run`.
+
+## Usage / Examples
+
+```python
+# app/main.py — simplified flow
+while True:
+    user_input = read_line("$ ")
+    handle_command(user_input)  # dispatches to builtins or subprocess
+```
+
+Example shell session:
+
+```bash
+$ echo hello
+hello
+$ type ls
+ls is /usr/bin/ls
+$ unknown_command
+unknown_command: command not found
+$ exit
+```
+
+## Submit to CodeCrafters
+
+To run tests on CodeCrafters servers and advance to the next stage:
+
+```bash
 codecrafters submit
 ```
 
-Time to move on to the next stage!
+## Related
 
-# Stage 2 & beyond
 
-Note: This section is for stages 2 and beyond.
-
-1. Ensure you have `uv` installed locally
-1. Run `./your_program.sh` to run your program, which is implemented in
-   `app/main.py`.
-1. Run `codecrafters submit` to submit your solution to CodeCrafters. Test
-   output will be streamed to your terminal.
+- [CodeCrafters](https://app.codecrafters.io/)
+- [uv documentation](https://docs.astral.sh/uv/)
