@@ -15,7 +15,7 @@ def main():
 def handle_command(cmd):
     match cmd.split()[0]:
         case "echo":
-            print(cmd[4:])
+            print(cmd[5:])
         case _:
             sys.stdout.write(f"{cmd}: command not found\n")
 
