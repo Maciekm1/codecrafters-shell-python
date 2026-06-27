@@ -1,5 +1,6 @@
 import sys
 import os
+import subprocess
 
 BUILT_INS = {"echo", "exit", "type"}
 
@@ -13,24 +14,33 @@ def main():
         handle_command(user_input)
 
 
-def handle_command(cmd):
+def handle_command(cmd: str):
     match cmd.split()[0]:
+
         case "echo":
             print(cmd[len("echo")+1:])
+
         case "type":
             arg = cmd[len("type")+1:]
 
             if arg in BUILT_INS:
                 print(f"{arg} is a shell builtin")
             else:
-                check_if_in_path(arg)
+                arg_in_path(arg, True)
+
         case "exit":
             sys.exit(0)
+
         case _:
-            sys.stdout.write(f"{cmd}: command not found\n")
+            args = cmd.split(" ")
+            if arg_in_path(args[0], False):
+                # Execute in a subprocess with args
+                subprocess.run(args)
+            else:
+                sys.stdout.write(f"{cmd}: command not found\n")
 
 
-def check_if_in_path(arg):
+def arg_in_path(arg: str, verbose: bool) -> bool:
     PATH = os.getenv('PATH')
     found = False
 
@@ -38,12 +48,15 @@ def check_if_in_path(arg):
     for dir in PATH.split(':'):
         fp = os.path.join(dir, arg)
         if os.path.exists(fp) and os.access(fp, os.X_OK):
-            print(f"{arg} is {fp}")
+            if verbose:
+                print(f"{arg} is {fp}")
             found = True
-            break
+            return True
     
     if not found:
-        print(f"{arg}: not found")
+        if verbose:
+            print(f"{arg}: not found")
+        return False
 
 
 if __name__ == "__main__":
