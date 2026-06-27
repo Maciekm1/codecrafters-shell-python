@@ -1,6 +1,8 @@
-from operator import truediv
 import sys
 import os
+
+BUILT_INS = {"echo", "exit", "type"}
+
 
 def main():
     while 1:
@@ -8,23 +10,22 @@ def main():
         sys.stdout.flush()
 
         user_input = sys.stdin.readline().rstrip()
-        if user_input == "exit":
-            break
-
         handle_command(user_input)
 
 
 def handle_command(cmd):
     match cmd.split()[0]:
         case "echo":
-            print(cmd[5:])
+            print(cmd[len("echo")+1:])
         case "type":
-            arg = cmd[5:]
-            match arg:
-                case "echo" | "exit" | "type":
-                    print(f"{arg} is a shell builtin")
-                case _:
-                    check_if_in_path(arg)
+            arg = cmd[len("type")+1:]
+
+            if arg in BUILT_INS:
+                print(f"{arg} is a shell builtin")
+            else:
+                check_if_in_path(arg)
+        case "exit":
+            sys.exit(0)
         case _:
             sys.stdout.write(f"{cmd}: command not found\n")
 
@@ -33,10 +34,9 @@ def check_if_in_path(arg):
     PATH = os.getenv('PATH')
     found = False
 
+    # Check if file with command name exists within PATH and has execute permissions
     for dir in PATH.split(':'):
-        # Check if file with command name exists within this dir
-        # Check if it has execute permissions
-        fp = f"{dir}/{arg}"
+        fp = os.path.join(dir, arg)
         if os.path.exists(fp) and os.access(fp, os.X_OK):
             print(f"{arg} is {fp}")
             found = True
