@@ -1,12 +1,12 @@
 # My own Shell program
 
-[![progress-banner](https://backend.codecrafters.io/progress/shell/9dfcf5e0-00ab-4958-b292-7cc85a999694)](https://app.codecrafters.io/users/Maciekm1?r=2qF)
 [![Python](https://img.shields.io/badge/python-3.14-blue?logo=python)](https://www.python.org/downloads/release/python-3140/)
 [![uv](https://img.shields.io/badge/package%20manager-uv-blueviolet?logo=python)](https://docs.astral.sh/uv/)
 
 My own implementation of a lightweight POSIX-style shell in Python, written to better understand how a shell works under the hood.
 
 This project is part of the [CodeCrafters "Build Your Own Shell" challenge](https://app.codecrafters.io/courses/shell/overview), where you incrementally build a shell capable of parsing commands, running external programs, and supporting builtin commands like `cd`, `pwd`, and `echo`.
+
 
 ## Features
 
@@ -15,21 +15,30 @@ This project is part of the [CodeCrafters "Build Your Own Shell" challenge](http
 - External command execution via `PATH` lookup
 - Command-not-found error handling
 
+
 ## Roadmap
 
 This shell is being built stage-by-stage. Upcoming work includes:
 
-- `cd` and `pwd` builtins
-- Standard output and error redirection (`>`, `>>`, `2>`, etc.)
-- Command pipelines (`|`)
-- Quoted arguments and escape sequences
-- Autocompletion and history
+- Navigation; `cd` and `pwd` builtins
+- Quoting; preserve whitespace and special characters
+- Redirection; Standard output and error redirection (`>`, `>>`, etc.)
+- Command Completion; autocomplete commands and executable files
+- Filename Completion
+- Programmable Completion; `complete` builtin, custom tab-completion behaviour
+- Background Jobs; multiple commands in the background at once
+- Pipelines (`|`)
+- History; `history` builtin
+- History Persistence; save history to a file
+- Parameter Expansion; shell variables
 
-## Lessons Learned
+
+## Lessons Learned so far
 
 - How a REPL reads input, parses commands, and dispatches to builtins vs external programs
 - How shells resolve executables using the `PATH` environment variable
 - The difference between shell builtins and programs found on disk
+
 
 ## Installation
 
@@ -52,6 +61,7 @@ Install dependencies (uv reads `pyproject.toml` and manages the Python version v
 uv sync
 ```
 
+
 ## Run Locally
 
 Start the shell:
@@ -67,12 +77,13 @@ $ echo hello world
 hello world
 $ type echo
 echo is a shell builtin
-$ ls
+$ ls -l
 <file listing>
 $ exit
 ```
 
 The entry point for the shell implementation is `app/main.py`. Locally, `your_program.sh` runs it via `uv run`.
+
 
 ## Usage / Examples
 
@@ -95,16 +106,19 @@ unknown_command: command not found
 $ exit
 ```
 
+
 ## Submit to CodeCrafters
 
-To run tests on CodeCrafters servers and advance to the next stage:
+[![progress-banner](https://backend.codecrafters.io/progress/shell/9dfcf5e0-00ab-4958-b292-7cc85a999694)](https://app.codecrafters.io/users/Maciekm1?r=2qF)
+
+To run tests on CodeCrafters servers:
 
 ```bash
 codecrafters submit
 ```
 
-## Related
 
+## Related
 
 - [CodeCrafters](https://app.codecrafters.io/)
 - [uv documentation](https://docs.astral.sh/uv/)
