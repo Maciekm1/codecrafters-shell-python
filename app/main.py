@@ -1,4 +1,6 @@
+from operator import truediv
 import sys
+import os
 
 def main():
     while 1:
@@ -22,10 +24,26 @@ def handle_command(cmd):
                 case "echo" | "exit" | "type":
                     print(f"{arg} is a shell builtin")
                 case _:
-                    print(f"{arg}: not found")
-
+                    check_if_in_path(arg)
         case _:
             sys.stdout.write(f"{cmd}: command not found\n")
+
+
+def check_if_in_path(arg):
+    PATH = os.getenv('PATH')
+    found = False
+
+    for dir in PATH.split(':'):
+        # Check if file with command name exists within this dir
+        # Check if it has execute permissions
+        fp = f"{dir}/{arg}"
+        if os.path.exists(fp) and os.access(fp, os.X_OK):
+            print(f"{arg} is {fp}")
+            found = True
+            break
+    
+    if not found:
+        print(f"{arg}: not found")
 
 
 if __name__ == "__main__":
