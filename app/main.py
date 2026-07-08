@@ -18,7 +18,8 @@ def handle_command(cmd: str):
     match cmd.split()[0]:
 
         case "echo":
-            print(cmd[len("echo")+1:])
+            # Print the command without the "echo " (5 chr)
+            print(cmd[5:])
 
         case "type":
             arg = cmd[len("type")+1:]
