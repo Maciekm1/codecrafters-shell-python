@@ -2,7 +2,7 @@ import sys
 import os
 import subprocess
 
-BUILT_INS = {"echo", "exit", "type"}
+BUILT_INS = {"echo", "exit", "type", "pwd"}
 
 
 def main():
@@ -28,6 +28,9 @@ def handle_command(cmd: str):
                 print(f"{arg} is a shell builtin")
             else:
                 arg_in_path(arg, True)
+
+        case "pwd":
+            print(os.getcwd())
 
         case "exit":
             sys.exit(0)
