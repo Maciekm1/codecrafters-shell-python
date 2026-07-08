@@ -2,7 +2,7 @@ import sys
 import os
 import subprocess
 
-BUILT_INS = {"echo", "exit", "type", "pwd"}
+BUILT_INS = {"echo", "exit", "type", "pwd", "cd"}
 
 
 def main():
@@ -32,6 +32,10 @@ def handle_command(cmd: str):
         case "pwd":
             print(os.getcwd())
 
+        case "cd":
+            arg = cmd[len("cd")+1:]
+            handle_path(arg)
+
         case "exit":
             sys.exit(0)
 
@@ -43,6 +47,23 @@ def handle_command(cmd: str):
             else:
                 sys.stdout.write(f"{cmd}: command not found\n")
 
+
+def handle_path(path: str):
+    match path[0]:
+        case "/":
+            # Absolute path
+            if os.path.exists(path):
+                os.chdir(path)
+            else:
+                print("cd: <directory>: No such file or directory")
+        case ".":
+            # Relative path
+            pass
+        case "~":
+            # Home directory
+            pass
+        case _:
+            print("invalid")
 
 def arg_in_path(arg: str, verbose: bool) -> bool:
     PATH = os.getenv('PATH')
