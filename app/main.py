@@ -49,27 +49,48 @@ def handle_command(cmd: str):
 
 
 def handle_path(path: str):
+    
+    if not path:
+        return
+
     match path[0]:
-        case "/":
-            # Absolute path
+
+        case "/": # Absolute path
             if os.path.exists(path):
                 os.chdir(path)
             else:
                 print(f"cd: {path}: No such file or directory")
-        case ".":
-            # Relative path
+
+        case ".": # Relative path
+            stack = os.getcwd()[1:].split("/")
+            
+            for l in path.split("/"):
+                if l == ".":
+                    pass
+                elif l == "..":
+                    if stack:
+                        stack.pop()
+                else:
+                    stack.append(l)
+            
+            new_dir = "/" + "/".join(stack)
+            if os.path.exists(new_dir):
+                os.chdir(new_dir)
+            else:
+                print(f"cd: {path}: No such file or directory")
+
+        case "~": # Home directory
             pass
-        case "~":
-            # Home directory
-            pass
+
         case _:
             print("invalid")
 
+
+# Returns True if '{pwd}/arg' exists within PATH and has execute permissions
 def arg_in_path(arg: str, verbose: bool) -> bool:
     PATH = os.getenv('PATH')
     found = False
 
-    # Check if file with command name exists within PATH and has execute permissions
     for dir in PATH.split(':'):
         fp = os.path.join(dir, arg)
         if os.path.exists(fp) and os.access(fp, os.X_OK):
