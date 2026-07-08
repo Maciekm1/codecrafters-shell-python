@@ -55,7 +55,7 @@ def handle_path(path: str):
             if os.path.exists(path):
                 os.chdir(path)
             else:
-                print("cd: <directory>: No such file or directory")
+                print(f"cd: {path}: No such file or directory")
         case ".":
             # Relative path
             pass
