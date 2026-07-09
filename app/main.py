@@ -53,37 +53,29 @@ def handle_path(path: str):
     if not path:
         return
 
-    match path[0]:
+    # Split path elements into list and handle '..' via a stack pop
+    stack = os.getcwd()[1:].split("/") if path[0] == '.' else []
 
-        case "/": # Absolute path
-            if os.path.exists(path):
-                os.chdir(path)
-            else:
-                print(f"cd: {path}: No such file or directory")
-
-        case ".": # Relative path
-            stack = os.getcwd()[1:].split("/")
-            
-            for l in path.split("/"):
-                if l == ".":
-                    pass
-                elif l == "..":
-                    if stack:
-                        stack.pop()
-                else:
-                    stack.append(l)
-            
-            new_dir = "/" + "/".join(stack)
-            if os.path.exists(new_dir):
-                os.chdir(new_dir)
-            else:
-                print(f"cd: {path}: No such file or directory")
-
-        case "~": # Home directory
+    for l in path.split("/"):
+        if l == ".":
             pass
+        elif l == "..":
+            if stack:
+                stack.pop()
+        elif l == "~":
+            stack.append(os.getenv("HOME"))
+        else:
+            stack.append(l)
 
-        case _:
-            print("invalid")
+    new_dir = "/".join(stack)
+
+    if not new_dir: new_dir = "/"
+    if new_dir and new_dir[0] != "/": new_dir = "/" + new_dir
+
+    if os.path.exists(new_dir) or new_dir == "/":
+        os.chdir(new_dir)
+    else:
+        print(f"cd: {path}: No such file or directory")
 
 
 # Returns True if '{pwd}/arg' exists within PATH and has execute permissions
