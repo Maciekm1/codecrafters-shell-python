@@ -2,6 +2,8 @@ import sys
 import os
 import subprocess
 
+from app.extensions.navigation import handle_path
+
 BUILT_INS = {"echo", "exit", "type", "pwd", "cd"}
 
 
@@ -18,8 +20,7 @@ def handle_command(cmd: str):
     match cmd.split()[0]:
 
         case "echo":
-            # Print the command without the "echo " (5 chr)
-            print(cmd[5:])
+            print(cmd[5:]) # Print the command without the "echo " (5 chr)
 
         case "type":
             arg = cmd[len("type")+1:]
@@ -42,36 +43,9 @@ def handle_command(cmd: str):
         case _:
             args = cmd.split(" ")
             if arg_in_path(args[0], False):
-                # Execute in a subprocess with args
-                subprocess.run(args)
+                subprocess.run(args) # Execute in a subprocess with args
             else:
                 sys.stdout.write(f"{cmd}: command not found\n")
-
-
-def handle_path(path: str):
-    
-    if not path:
-        return
-
-    # Split path elements into list and handle '..' via a stack pop
-    stack = os.getcwd()[1:].split("/") if path[0] == '.' else []
-    for l in path.split("/"):
-        if l == "." or l =='':
-            pass
-        elif l == "..":
-            if stack:
-                stack.pop()
-        elif l == "~":
-            stack.append(os.getenv("HOME"))
-        else:
-            stack.append(l)
-
-    new_dir = "/" + "/".join(stack)
-
-    if os.path.exists(new_dir) or new_dir == "/":
-        os.chdir(new_dir)
-    else:
-        print(f"cd: {path}: No such file or directory")
 
 
 # Returns True if '{pwd}/arg' exists within PATH and has execute permissions i.e. not a built-in shell function
