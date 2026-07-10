@@ -11,16 +11,16 @@ This project is part of the [CodeCrafters "Build Your Own Shell" challenge](http
 ## Features
 
 - Interactive REPL (Read-Evaluate-Parse Loop) with a `$` prompt
-- Builtin commands: `echo`, `exit`, and `type`
+- Builtin commands: `echo`, `exit`, `type`, `cd` and `pwd`
 - External command execution via `PATH` lookup
 - Command-not-found error handling
+- Navigation; `cd` and `pwd` builtins
 
 
 ## Roadmap
 
 This shell is being built stage-by-stage. Upcoming work includes:
 
-- Navigation; `cd` and `pwd` builtins
 - Quoting; preserve whitespace and special characters
 - Redirection; Standard output and error redirection (`>`, `>>`, etc.)
 - Command Completion; autocomplete commands and executable files
